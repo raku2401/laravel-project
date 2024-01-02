@@ -1,14 +1,16 @@
-# Use the official PHP 8.1 image as the base image
-FROM php:8.1-cli
+# Dockerfile
+FROM php:8.1-fpm as php
 
-COPY --chown=www-data:www-data . /srv/app
+RUN apt-get update -y && apt-get install -y libmcrypt-dev libcurl4-gnutls-dev nginx libonig-dev
 
-COPY .docker/vhost.conf /etc/apache2/sites-available/000-default.conf 
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-WORKDIR /srv/app
+RUN docker-php-ext-install mysqli pdo pdo_mysql bcmath curl mbstring
 
-# Install dependencies.
-RUN apt-get update && apt-get install -y unzip libpq-dev libcurl4-gnutls-dev nginx libonig-dev
+WORKDIR /app
+COPY . /app
 
-# Install PHP extensions.
-RUN docker-php-ext-install mysqli pdo pdo_mysql bcmath curl  mbstring
+RUN composer install
+
+EXPOSE 8000
+CMD php artisan serve --host=0.0.0.0 --port=8000                                                        
