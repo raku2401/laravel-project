@@ -1,5 +1,5 @@
-FROM php:8.1-fpm as php
-
+# Use the official PHP 8.1 image as the base image
+FROM php:8.1-cli
 
 COPY --chown=www-data:www-data . /srv/app
 
