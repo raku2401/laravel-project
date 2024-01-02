@@ -9,7 +9,7 @@ phases:
     - echo Logging in to Amazon ECR....
     - aws --version
     # login to Elastic container registry
-    - eval $(aws ecr get-login --region us-east-1 --no-include-email | sed 's|https://||')
+    #- eval $(aws ecr get-login --region us-east-1 --no-include-email | sed 's|https://||')
     - REPOSITORY_URI=737808382137.dkr.ecr.us-east-1.amazonaws.com/laravel-docker-aws
     - IMAGE_TAG=1.0
   build:
@@ -29,5 +29,5 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker image ls -a
-      - eval $(aws ecr get-login --region us-east-1 --no-include-email | sed 's|https://||')
+      - eval $(aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $REPOSITORY_URI)
       - sudo docker push $REPOSITORY_URI:$IMAGE_TAG
