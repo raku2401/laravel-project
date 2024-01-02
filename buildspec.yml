@@ -29,5 +29,5 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker image...
       - docker image ls -a
-      - docker push $REPOSITORY_URI:$IMAGE_TAG     
+      - docker push $REPOSITORY_URI:latest    
 
